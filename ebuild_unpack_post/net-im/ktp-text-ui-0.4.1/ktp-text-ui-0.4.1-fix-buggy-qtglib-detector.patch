@@ -1,0 +1,36 @@
+diff -ru ktp-text-ui-0.4.1.origin/cmake/modules/FindQtGLib.cmake ktp-text-ui-0.4.1/cmake/modules/FindQtGLib.cmake
+--- ktp-text-ui-0.4.1.origin/cmake/modules/FindQtGLib.cmake	2012-07-25 18:46:18.000000000 +0400
++++ ktp-text-ui-0.4.1/cmake/modules/FindQtGLib.cmake	2012-09-05 11:12:32.000000000 +0400
+@@ -27,18 +27,22 @@
+         PKG_CHECK_MODULES(PC_QTGLIB QtGLib-2.0)
+     endif (QTGLIB_MIN_VERSION)
+     set(QTGLIB_DEFINITIONS ${PC_QTGLIB_CFLAGS_OTHER})
++    # NOTE Do not lose all include directories! It can be more than just a single /usr/include/QtGStreamer!
++    # BUG https://bugs.gentoo.org/show_bug.cgi?id=432976
++    set(QTGLIB_INCLUDE_DIR ${PC_QTGLIB_INCLUDE_DIRS})
++else (NOT WIN32)
++    # TODO Obviously it would be buggy in a Windows, but I have no idea how to fix it...
++    find_path(QTGLIB_INCLUDE_DIR
++        NAMES QGlib/Object
++        PATHS ${PC_QTGLIB_INCLUDEDIR} ${PC_QTGLIB_INCLUDE_DIRS}
++        PATH_SUFFIXES QtGStreamer
++      )
+ endif (NOT WIN32)
+ 
+-find_path(QTGLIB_INCLUDE_DIR 
+-   NAMES QGlib/Object
+-   PATHS ${PC_QTGLIB_INCLUDEDIR} ${PC_QTGLIB_INCLUDE_DIRS} 
+-   PATH_SUFFIXES QtGStreamer
+-   )
+-
+-find_library(QTGLIB_LIBRARIES 
+-   NAMES QtGLib-2.0
+-   PATHS ${PC_QTGLIB_LIBDIR} ${PC_QTGLIB_LIBRARY_DIRS}
+-   )
++find_library(QTGLIB_LIBRARIES
++    NAMES QtGLib-2.0
++    PATHS ${PC_QTGLIB_LIBDIR} ${PC_QTGLIB_LIBRARY_DIRS}
++  )
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(QtGLib-2.0 DEFAULT_MSG QTGLIB_LIBRARIES QTGLIB_INCLUDE_DIR)

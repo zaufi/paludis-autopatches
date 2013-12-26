@@ -1,0 +1,46 @@
+From bba3c504652b97497cf92102be475fb21ef57480 Mon Sep 17 00:00:00 2001
+From: Alex Turbov <i.zaufi@gmail.com>
+Date: Wed, 17 Apr 2013 00:43:08 +0400
+Subject: [PATCH] Make consistent behaviour of 'wordNext()' -- i.e. like a
+ 'wordPrev()'
+
+---
+ part/view/kateviewinternal.cpp | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/part/view/kateviewinternal.cpp b/part/view/kateviewinternal.cpp
+index 785a7f0..7cf539b 100644
+--- a/part/view/kateviewinternal.cpp
++++ b/part/view/kateviewinternal.cpp
+@@ -1119,6 +1119,7 @@ void KateViewInternal::wordNext( bool sel )
+ {
+   WrappingCursor c( this, m_cursor );
+ 
++  // First we skip forward all spaces.
+   // We look up into which category the current position falls:
+   // 1. a "word" character
+   // 2. a "non-word" character (except space)
+@@ -1128,6 +1129,10 @@ void KateViewInternal::wordNext( bool sel )
+   // The code assumes that space is never part of the word character class.
+ 
+   KateHighlighting* h = doc()->highlight();
++  if( !c.atEdge( right ) ) {
++    while( !c.atEdge( right ) && doc()->line( c.line() )[ c.column() ].isSpace() )
++      ++c;
++  }
+   if( c.atEdge( right ) )
+   {
+     ++c;
+@@ -1149,9 +1154,6 @@ void KateViewInternal::wordNext( bool sel )
+     }
+   }
+ 
+-  while( !c.atEdge( right ) && doc()->line( c.line() )[ c.column() ].isSpace() )
+-    ++c;
+-
+   updateSelection( c, sel );
+   updateCursor( c );
+ }
+-- 
+1.8.1.5
+

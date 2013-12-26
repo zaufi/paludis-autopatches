@@ -1,0 +1,40 @@
+diff -ub -rub qt-gstreamer-0.10.2.origin/src/QGlib/QtGLib-2.0.pc.in qt-gstreamer-0.10.2/src/QGlib/QtGLib-2.0.pc.in
+--- qt-gstreamer-0.10.2.origin/src/QGlib/QtGLib-2.0.pc.in	2012-04-15 13:03:08.000000000 +0400
++++ qt-gstreamer-0.10.2/src/QGlib/QtGLib-2.0.pc.in	2012-09-05 10:13:45.000000000 +0400
+@@ -8,5 +8,5 @@
+ Requires: QtCore
+ Requires.private: gobject-2.0
+ Version: @QTGSTREAMER_VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} -I@Boost_INCLUDE_DIR@
+ Libs: -L${libdir} -lQtGLib-2.0
+diff -ub -rub qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamer-0.10.pc.in qt-gstreamer-0.10.2/src/QGst/QtGStreamer-0.10.pc.in
+--- qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamer-0.10.pc.in	2012-04-15 13:03:08.000000000 +0400
++++ qt-gstreamer-0.10.2/src/QGst/QtGStreamer-0.10.pc.in	2012-09-05 10:14:11.000000000 +0400
+@@ -8,5 +8,5 @@
+ Requires: QtGLib-2.0
+ Requires.private: gstreamer-0.10 gstreamer-interfaces-0.10 gobject-2.0
+ Version: @QTGSTREAMER_VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} -I@Boost_INCLUDE_DIR@
+ Libs: -L${libdir} -lQtGStreamer-0.10
+diff -ub -rub qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamerUi-0.10.pc.in qt-gstreamer-0.10.2/src/QGst/QtGStreamerUi-0.10.pc.in
+--- qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamerUi-0.10.pc.in	2012-04-15 13:03:08.000000000 +0400
++++ qt-gstreamer-0.10.2/src/QGst/QtGStreamerUi-0.10.pc.in	2012-09-05 10:14:30.000000000 +0400
+@@ -7,5 +7,5 @@
+ Description: QtGui GStreamer integration library
+ Requires: QtGui QtGStreamer-0.10
+ Version: @QTGSTREAMER_VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} -I@Boost_INCLUDE_DIR@
+ Libs: -L${libdir} -lQtGStreamerUi-0.10
+diff -ub -rub qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamerUtils-0.10.pc.in qt-gstreamer-0.10.2/src/QGst/QtGStreamerUtils-0.10.pc.in
+--- qt-gstreamer-0.10.2.origin/src/QGst/QtGStreamerUtils-0.10.pc.in	2012-04-15 13:03:08.000000000 +0400
++++ qt-gstreamer-0.10.2/src/QGst/QtGStreamerUtils-0.10.pc.in	2012-09-05 10:14:38.000000000 +0400
+@@ -8,5 +8,5 @@
+ Requires: QtGStreamer-0.10
+ Requires.private: gstreamer-0.10 gstreamer-app-0.10
+ Version: @QTGSTREAMER_VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} -I@Boost_INCLUDE_DIR@
+ Libs: -L${libdir} -lQtGStreamerUtils-0.10

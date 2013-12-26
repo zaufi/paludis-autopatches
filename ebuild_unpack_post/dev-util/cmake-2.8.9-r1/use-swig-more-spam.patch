@@ -1,0 +1,11 @@
+--- Modules/UseSWIG.cmake.org	2011-10-04 20:09:24.000000000 +0400
++++ Modules/UseSWIG.cmake	2011-11-07 21:23:23.000000000 +0400
+@@ -181,7 +181,7 @@
+     "${swig_source_file_fullname}"
+     MAIN_DEPENDENCY "${swig_source_file_fullname}"
+     DEPENDS ${SWIG_MODULE_${name}_EXTRA_DEPS}
+-    COMMENT "Swig source") 
++    COMMENT "Swig source ${infile}")
+   SET_SOURCE_FILES_PROPERTIES("${swig_generated_file_fullname}" ${swig_extra_generated_files}
+     PROPERTIES GENERATED 1)
+   SET(${outfiles} "${swig_generated_file_fullname}" ${swig_extra_generated_files})

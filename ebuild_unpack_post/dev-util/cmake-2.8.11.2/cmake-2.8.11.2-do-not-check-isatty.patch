@@ -1,0 +1,12 @@
+diff -ub -rub cmake-2.8.11.2.org/Source/kwsys/Terminal.c cmake-2.8.11.2/Source/kwsys/Terminal.c
+--- cmake-2.8.11.2.org/Source/kwsys/Terminal.c	2013-07-02 17:41:40.000000000 +0400
++++ cmake-2.8.11.2/Source/kwsys/Terminal.c	2013-09-20 10:28:19.000000000 +0400
+@@ -209,7 +209,7 @@
+ #if defined(KWSYS_TERMINAL_ISATTY_WORKS)
+   /* Make sure the stream is a tty. */
+   (void)default_tty;
+-  return isatty(fileno(stream))? 1:0;
++  return 1;
+ #else
+   /* Check for cases in which the stream is definately not a tty.  */
+   if(kwsysTerminalStreamIsNotInteractive(stream))
