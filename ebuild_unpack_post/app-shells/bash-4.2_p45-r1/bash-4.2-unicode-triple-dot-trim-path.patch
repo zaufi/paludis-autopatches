@@ -1,0 +1,16 @@
+diff -ub -r bash-4.2.org/general.c bash-4.2/general.c
+--- bash-4.2.org/general.c	2010-12-12 23:06:27.000000000 +0300
++++ bash-4.2/general.c	2014-02-02 21:25:00.000000000 +0400
+@@ -761,9 +761,9 @@
+   if (nlen <= 3)
+     return name;
+ 
+-  *nbeg++ = '.';
+-  *nbeg++ = '.';
+-  *nbeg++ = '.';
++  *nbeg++ = '\xe2';
++  *nbeg++ = '\x80';
++  *nbeg++ = '\xa6';
+ 
+   nlen = nend - ntail;
+   memcpy (nbeg, ntail, nlen);
