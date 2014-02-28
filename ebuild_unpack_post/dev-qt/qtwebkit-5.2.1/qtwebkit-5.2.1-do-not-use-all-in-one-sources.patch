@@ -1,0 +1,25 @@
+diff -u -r qtwebkit-opensource-src-5.2.1.org/Tools/qmake/mkspecs/features/production_build.prf qtwebkit-opensource-src-5.2.1/Tools/qmake/mkspecs/features/production_build.prf
+--- qtwebkit-opensource-src-5.2.1.org/Tools/qmake/mkspecs/features/production_build.prf	2014-02-02 00:37:41.000000000 +0400
++++ qtwebkit-opensource-src-5.2.1/Tools/qmake/mkspecs/features/production_build.prf	2014-03-01 00:18:25.000000000 +0400
+@@ -1,7 +1,9 @@
+ # All in one files reduce memory usage at link time. At compiler time the code
+ # visibility for the compiler increases and faster more compact code can be produced,
+ # so turn it on in production builds.
+-CONFIG *= use_all_in_one_files
++
++# FUCK THIS SHIT!
++# CONFIG *= use_all_in_one_files
+ 
+ # Builds with debug flags result in a huge amount of symbols with the GNU toolchain,
+ # resulting in the need of several gigabytes of memory at link-time. Reduce the pressure
+diff -u -r qtwebkit-opensource-src-5.2.1.org/Tools/qmake/mkspecs/features/unix/default_pre.prf qtwebkit-opensource-src-5.2.1/Tools/qmake/mkspecs/features/unix/default_pre.prf
+--- qtwebkit-opensource-src-5.2.1.org/Tools/qmake/mkspecs/features/unix/default_pre.prf	2014-02-02 00:37:41.000000000 +0400
++++ qtwebkit-opensource-src-5.2.1/Tools/qmake/mkspecs/features/unix/default_pre.prf	2014-03-01 00:18:48.000000000 +0400
+@@ -13,6 +13,6 @@
+ !isEmpty(SBOX_CHECK): CONFIG += scratchbox
+ 
+ # Reduce linking memory pressure on 32-bit debug builds on Linux
+-linux-g++*:CONFIG(debug, debug|release):isEqual(QT_ARCH,i386): CONFIG += use_all_in_one_files
++# linux-g++*:CONFIG(debug, debug|release):isEqual(QT_ARCH,i386): CONFIG += use_all_in_one_files
+ 
+ load(default_pre)
