@@ -1,0 +1,12 @@
+diff -u -r pytz-2014.1.org/setup.py pytz-2014.1/setup.py
+--- pytz-2014.1.org/setup.py	2014-03-16 13:57:00.000000000 +0400
++++ pytz-2014.1/setup.py	2014-03-16 14:03:51.588066608 +0400
+@@ -20,7 +20,7 @@
+     version=pytz.VERSION,
+     zip_safe=True,
+     description='World timezone definitions, modern and historical',
+-    long_description=open('README.txt','r').read(),
++    long_description=open('README.txt','r',encoding='UTF-8').read(),
+     author=me,
+     author_email=memail,
+     maintainer=me,
