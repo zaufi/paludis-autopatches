@@ -112,7 +112,7 @@ index 639f7e58156d390f8f5c7742c5da2005f1b3c806..668d6c8c52e1bb160dd4f0602096e1b7
 +          else {
 +            // NOTE Fallback to "old" behaviour:
 +            // read non plural form of syntax styles: 'required-syntax-style'
-+            indentHeader.setRequiredStyles(pairs.take("required-syntax-style"));
++            indentHeader.setRequiredStyles(QStringList(pairs.take("required-syntax-style")));
 +          }
            // which languages does this support?
 -          QString indentLanguages = pairs.take("indent-languages");
