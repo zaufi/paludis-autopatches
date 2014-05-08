@@ -1,0 +1,258 @@
+diff --git a/part/script/data/indentation/cmake.js b/part/script/data/indentation/cmake.js
+index 80bd5ca98d22da6e8fe6523aa7c02dd5d67c8e6f..9f62f4ef348af4a07e374d1c78fc8e76c3f2add1 100644
+--- a/part/script/data/indentation/cmake.js
++++ b/part/script/data/indentation/cmake.js
+@@ -4,7 +4,7 @@
+  * author: Alex Turbov <i.zaufi@gmail.com>
+  * revision: 1
+  * kate-version: 3.4
+- * required-syntax-style: CMake
++ * required-syntax-styles: CMake
+  * indent-languages: CMake
+  *
+  * This file is part of the Kate Project.
+diff --git a/part/script/data/indentation/cppstyle.js b/part/script/data/indentation/cppstyle.js
+index ff5ede15d917df7ce7945bc63533410a21518742..79c6764527b7c379cce0b2a1fedc8478e2d25cb4 100644
+--- a/part/script/data/indentation/cppstyle.js
++++ b/part/script/data/indentation/cppstyle.js
+@@ -5,6 +5,7 @@
+  * revision: 30
+  * kate-version: 3.4
+  * priority: 10
++ * required-syntax-styles: C++, C++/Qt4, ISO C++
+  * indent-languages: C++, C++/Qt4, ISO C++
+  *
+  * This file is part of the Kate Project.
+diff --git a/part/script/data/indentation/lilypond.js b/part/script/data/indentation/lilypond.js
+index 5654ec760629295312af10c6a9ae9a40985b7c14..1e7b14cee417e6c739081c0d33560380beb23c82 100644
+--- a/part/script/data/indentation/lilypond.js
++++ b/part/script/data/indentation/lilypond.js
+@@ -4,7 +4,7 @@
+  * author: Wilbert Berendsen <info@wilbertberendsen.nl>
+  * revision: 2
+  * kate-version: 3.4
+- * required-syntax-style: lilypond
++ * required-syntax-styles: lilypond
+  * indent-languages: lilypond
+  *
+  *
+diff --git a/part/script/data/indentation/ruby.js b/part/script/data/indentation/ruby.js
+index 90c714810f52f90127804a54db4900dfc8e6189a..49346645c800dcd0aac0052311a145423edfa402 100644
+--- a/part/script/data/indentation/ruby.js
++++ b/part/script/data/indentation/ruby.js
+@@ -4,7 +4,7 @@
+  * author: Robin Pedersen <robinpeder@gmail.com>
+  * revision: 1
+  * kate-version: 3.4
+- * required-syntax-style: ruby
++ * required-syntax-styles: ruby
+  * indent-languages: ruby
+  * priority: 0
+  *
+diff --git a/part/script/kateindentscript.h b/part/script/kateindentscript.h
+index b0ede0ddce22538bc1e0112d4513046b6bdbb6a9..5bb965abb209899587a4e17844d71f49c414e5cb 100644
+--- a/part/script/kateindentscript.h
++++ b/part/script/kateindentscript.h
+@@ -38,10 +38,10 @@ class KateIndentScriptHeader
+     inline const QString& name() const
+     { return m_name; }
+ 
+-    inline void setRequiredStyle(const QString& requiredStyle)
+-    { m_requiredStyle = requiredStyle; }
+-    inline const QString& requiredStyle() const
+-    { return m_requiredStyle; }
++    inline void setRequiredStyles(const QStringList& requiredStyles)
++    { m_requiredStyles = requiredStyles; }
++    inline const QStringList& requiredStyles() const
++    { return m_requiredStyles; }
+ 
+     inline void setIndentLanguages(const QStringList& indentLanguages)
+     { m_indentLanguages = indentLanguages; }
+@@ -63,10 +63,10 @@ class KateIndentScriptHeader
+ 
+    /**
+     * If this is an indenter, then this specifies the required syntax
+-    * highlighting style that must be used for this indenter to work properly.
++    * highlighting styles that must be used for this indenter to work properly.
+     * If this property is empty, the indenter doesn't require a specific style.
+     */
+-    QString m_requiredStyle;
++    QStringList m_requiredStyles;
+     /**
+     * If this script is an indenter, then the indentLanguages member specifies
+     * which languages this is an indenter for. The values must correspond with
+diff --git a/part/script/katescriptmanager.cpp b/part/script/katescriptmanager.cpp
+index 639f7e58156d390f8f5c7742c5da2005f1b3c806..668d6c8c52e1bb160dd4f0602096e1b7c8d7c17a 100644
+--- a/part/script/katescriptmanager.cpp
++++ b/part/script/katescriptmanager.cpp
+@@ -161,7 +161,7 @@ void KateScriptManager::collect(bool force)
+         // parseMetaInformation will have informed the user of the problem
+         continue;
+       }
+-      
++
+       /**
+        * remember type
+        */
+@@ -194,11 +194,31 @@ void KateScriptManager::collect(bool force)
+           }
+ 
+           // required style?
+-          indentHeader.setRequiredStyle(pairs.take("required-syntax-style"));
++          QString valuesStr = pairs.take("required-syntax-styles");
++          if(!valuesStr.isEmpty()) {
++            // ATTENTION If `required-syntax-styles' property of indenter script
++            // has spaces after a comma, it will break further matching!
++            // So lets strip them!
++            QStringList values = valuesStr.split(',', QString::SkipEmptyParts);
++            for (int i = 0; i < values.size(); ++i)
++              values[i] = values[i].trimmed();
++            indentHeader.setRequiredStyles(values);
++          }
++          else {
++            // NOTE Fallback to "old" behaviour:
++            // read non plural form of syntax styles: 'required-syntax-style'
++            indentHeader.setRequiredStyles(pairs.take("required-syntax-style"));
++          }
+           // which languages does this support?
+-          QString indentLanguages = pairs.take("indent-languages");
+-          if(!indentLanguages.isNull()) {
+-            indentHeader.setIndentLanguages(indentLanguages.split(','));
++          valuesStr = pairs.take("indent-languages");
++          if(!valuesStr.isEmpty()) {
++            //  ATTENTION If `indent-languages' property of indenter script
++            // has spaces after a comma, it will break further matching!
++            // So lets strip them!
++            QStringList values = valuesStr.split(',', QString::SkipEmptyParts);
++            for (int i = 0; i < values.size(); ++i)
++              values[i] = values[i].trimmed();
++            indentHeader.setIndentLanguages(values);
+           }
+           else {
+             indentHeader.setIndentLanguages(QStringList() << indentHeader.name());
+diff --git a/part/syntax/data/cpp.xml b/part/syntax/data/cpp.xml
+index d8a5764d7691eccd6de5846f95345c4690676f42..9291d8909d35f3612d42b967818dc9b98fbcbe88 100644
+--- a/part/syntax/data/cpp.xml
++++ b/part/syntax/data/cpp.xml
+@@ -16,6 +16,7 @@
+     indenter="cstyle"
+     mimetype="text/x-c++src;text/x-c++hdr;text/x-chdr"
+     extensions="*.c++;*.cxx;*.cpp;*.cc;*.C;*.h;*.hh;*.H;*.h++;*.hxx;*.hpp;*.hcc;*.moc"
++    style="C++"
+     author="Alex Turbov (i.zaufi@gmail.com)"
+     license="LGPL"
+     priority="9"
+diff --git a/part/syntax/data/isocpp.xml b/part/syntax/data/isocpp.xml
+index 2578c033696de86d14e1f123134f485a3012b4c0..b36195704c92186e44d9524c84bc9336ef00bfc9 100644
+--- a/part/syntax/data/isocpp.xml
++++ b/part/syntax/data/isocpp.xml
+@@ -16,6 +16,7 @@
+     indenter="cstyle"
+     mimetype="text/x-c++src;text/x-c++hdr;text/x-chdr"
+     extensions="*.c++;*.cxx;*.cpp;*.cc;*.C;*.h;*.hh;*.H;*.h++;*.hxx;*.hpp;*.hcc;*.moc"
++    style="ISO C++"
+     author="Alex Turbov (i.zaufi@gmail.com)"
+     license="LGPL"
+     priority="6"
+diff --git a/part/utils/kateautoindent.h b/part/utils/kateautoindent.h
+index 214e8f828b004cf1d74fdef9f3041d30caca6e9d..2d095c1355aa23c264f83e1e2305c0e7f60b00be 100644
+--- a/part/utils/kateautoindent.h
++++ b/part/utils/kateautoindent.h
+@@ -75,7 +75,7 @@ class KateAutoIndent : public QObject
+      * @param mode mode index
+      * @return required style, or empty if the mode doesn't require any style
+      */
+-    static QString modeRequiredStyle(int mode);
++    static QStringList modeRequiredStyles(int mode);
+ 
+     /**
+      * Maps name -> index
+diff --git a/part/utils/kateautoindent.cpp b/part/utils/kateautoindent.cpp
+index 99b6ae9063d5242899f04c27301288e1e9b5559e..ad1035ea817842b6c7c5ab350fe95b8e1f7dcae3 100644
+--- a/part/utils/kateautoindent.cpp
++++ b/part/utils/kateautoindent.cpp
+@@ -69,7 +69,7 @@ int KateAutoIndent::modeCount ()
+ }
+ 
+ 
+-QString KateAutoIndent::modeName (int mode)
++QString KateAutoIndent::modeName (const int mode)
+ {
+   if (mode == 0 || mode >= modeCount ())
+     return MODE_NONE;
+@@ -80,7 +80,7 @@ QString KateAutoIndent::modeName (int mode)
+   return KateGlobal::self()->scriptManager()->indentationScriptByIndex(mode-2)->indentHeader().baseName();
+ }
+ 
+-QString KateAutoIndent::modeDescription (int mode)
++QString KateAutoIndent::modeDescription (const int mode)
+ {
+   if (mode == 0 || mode >= modeCount ())
+     return i18nc ("Autoindent mode", "None");
+@@ -91,12 +91,14 @@ QString KateAutoIndent::modeDescription (int mode)
+   return i18nc ("Autoindent mode", KateGlobal::self()->scriptManager()->indentationScriptByIndex(mode-2)->indentHeader().name().toUtf8());
+ }
+ 
+-QString KateAutoIndent::modeRequiredStyle(int mode)
++QStringList KateAutoIndent::modeRequiredStyles(const int mode)
+ {
+-  if (mode == 0 || mode == 1 || mode >= modeCount())
+-    return QString();
+-
+-  return KateGlobal::self()->scriptManager()->indentationScriptByIndex(mode-2)->indentHeader().requiredStyle();
++  QStringList result;
++  if (!(mode == 0 || mode == 1 || mode >= modeCount()))
++  {
++    result = KateGlobal::self()->scriptManager()->indentationScriptByIndex(mode-2)->indentHeader().requiredStyles();
++  }
++  return result;
+ }
+ 
+ uint KateAutoIndent::modeNumber (const QString &name)
+@@ -297,8 +299,8 @@ void KateAutoIndent::scriptIndent (KateView *view, const KTextEditor::Cursor &po
+ 
+ bool KateAutoIndent::isStyleProvided(const KateIndentScript *script, const KateHighlighting *highlight)
+ {
+-  QString requiredStyle = script->indentHeader().requiredStyle();
+-  return (requiredStyle.isEmpty() || requiredStyle == highlight->style());
++  QStringList styles = script->indentHeader().requiredStyles();
++  return styles.isEmpty() || styles.contains(highlight->style());
+ }
+ 
+ void KateAutoIndent::setMode (const QString &name)
+@@ -339,7 +341,7 @@ void KateAutoIndent::setMode (const QString &name)
+     {
+       kWarning( 13060 ) << "mode" << name <<
+         "requires a different highlight style: document style '" << doc->highlightingMode() << "'"
+-        ", but script require '" << script->indentHeader().requiredStyle() << "'"
++        ", but script require '" << script->indentHeader().requiredStyles() << "'"
+         ;
+     }
+   }
+@@ -360,7 +362,7 @@ void KateAutoIndent::checkRequiredStyle()
+     {
+       kDebug( 13060 ) << "mode" << m_mode <<
+         "requires a different highlight style: document style '" << doc->highlightingMode() << "'"
+-        ", but script require '" << m_script->indentHeader().requiredStyle() << "'"
++        ", but script require '" << m_script->indentHeader().requiredStyles() << "'"
+         ;
+       doc->config()->setIndentationMode(MODE_NORMAL);
+     }
+@@ -476,14 +478,15 @@ void KateViewIndentationAction::slotAboutToShow()
+   foreach (QAction *action, actionGroup->actions()) {
+     actionGroup->removeAction(action);
+   }
++  const QString current_style = doc->highlight()->style();
+   for (int z=0; z<modes.size(); ++z) {
+     QAction *action = menu()->addAction( '&' + KateAutoIndent::modeDescription(z).replace('&', "&&") );
+     actionGroup->addAction(action);
+     action->setCheckable( true );
+     action->setData( z );
+ 
+-    QString requiredStyle = KateAutoIndent::modeRequiredStyle(z);
+-    action->setEnabled(requiredStyle.isEmpty() || requiredStyle == doc->highlight()->style());
++    QStringList requiredStyles = KateAutoIndent::modeRequiredStyles(z);
++    action->setEnabled(requiredStyles.isEmpty() || requiredStyles.contains(current_style));
+ 
+     if ( doc->config()->indentationMode() == KateAutoIndent::modeName (z) )
+       action->setChecked( true );
