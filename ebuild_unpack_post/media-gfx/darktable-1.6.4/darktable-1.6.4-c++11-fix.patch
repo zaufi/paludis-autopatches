@@ -1,0 +1,93 @@
+diff -u -r -b darktable-1.6.4/CMakeLists.txt darktable-1.6.4.org/CMakeLists.txt
+--- darktable-1.6.4/CMakeLists.txt	2015-05-04 13:25:13.084781636 +0800
++++ darktable-1.6.4.org/CMakeLists.txt	2015-04-03 21:59:08.000000000 +0800
+@@ -121,7 +121,7 @@
+ # Add a sensible build type default and warning because empty means no optimization and no debug info.
+ if(NOT CMAKE_BUILD_TYPE)
+ 	message("WARNING: CMAKE_BUILD_TYPE is not defined!\n         Defaulting to CMAKE_BUILD_TYPE=RelWithDebInfo. Use ccmake to set a proper value.")
+-#IGNORE 	SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
++	SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
+ endif(NOT CMAKE_BUILD_TYPE)
+ 
+ if(CMAKE_BUILD_TYPE MATCHES "^[Dd][Ee][Bb][Uu][Gg]$" AND SOURCE_PACKAGE)
+@@ -303,14 +303,3 @@
+ add_custom_target(uninstall
+     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+ 
+-
+-MESSAGE(STATUS "<<< Gentoo configuration >>>
+-Build type      ${CMAKE_BUILD_TYPE}
+-Install path    ${CMAKE_INSTALL_PREFIX}
+-Compiler flags:
+-C               ${CMAKE_C_FLAGS}
+-C++             ${CMAKE_CXX_FLAGS}
+-Linker flags:
+-Executable      ${CMAKE_EXE_LINKER_FLAGS}
+-Module          ${CMAKE_MODULE_LINKER_FLAGS}
+-Shared          ${CMAKE_SHARED_LINKER_FLAGS}\n")
+diff -u -r -b darktable-1.6.4/doc/CMakeLists.txt darktable-1.6.4.org/doc/CMakeLists.txt
+--- darktable-1.6.4/doc/CMakeLists.txt	2015-05-04 13:25:13.082781709 +0800
++++ darktable-1.6.4.org/doc/CMakeLists.txt	2015-04-03 21:59:08.000000000 +0800
+@@ -3,8 +3,8 @@
+ #
+ # Install Doc files
+ #
+-set(DOC_FILES README AUTHORS TRANSLATORS )
+-install(FILES ${DOC_FILES} DESTINATION ./share/doc/darktable-1.6.4)
++set(DOC_FILES README AUTHORS TRANSLATORS LICENSE)
++install(FILES ${DOC_FILES} DESTINATION ./share/doc/darktable)
+ 
+ # Build manual page
+ add_custom_command(
+@@ -60,7 +60,7 @@
+ 
+ add_custom_target(darktablerc.html ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/darktablerc.html)
+ 
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/darktablerc.html DESTINATION ${SHARE_INSTALL}/doc/darktable-1.6.4/)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/darktablerc.html DESTINATION ${SHARE_INSTALL}/doc/darktable/)
+ 
+ # we remove the usermanual from the release tarball as it adds an extra 77 MB which people don't need in general
+ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/usermanual)
+Only in darktable-1.6.4/packaging: debian
+diff -u -r -b darktable-1.6.4/src/external/LibRaw/internal/dcraw_common.cpp darktable-1.6.4.org/src/external/LibRaw/internal/dcraw_common.cpp
+--- darktable-1.6.4/src/external/LibRaw/internal/dcraw_common.cpp	2015-05-04 14:41:59.125642120 +0800
++++ darktable-1.6.4.org/src/external/LibRaw/internal/dcraw_common.cpp	2015-04-03 21:59:08.000000000 +0800
+@@ -3983,22 +3983,22 @@
+     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
+     -2,+1,-1,+0,0,0x04, -2,+1,+0,-1,1,0x04, -2,+1,+0,+0,0,0x06,
+     -2,+1,+0,+1,0,0x02, -2,+2,+0,+0,1,0x04, -2,+2,+0,+1,0,0x04,
+-    -1,-2,-1,+0,0,char(0x80), -1,-2,+0,-1,0,0x01, -1,-2,+1,-1,0,0x01,
+-    -1,-2,+1,+0,1,0x01, -1,-1,-1,+1,0,char(0x88), -1,-1,+1,-2,0,0x40,
++    -1,-2,-1,+0,0,0x80, -1,-2,+0,-1,0,0x01, -1,-2,+1,-1,0,0x01,
++    -1,-2,+1,+0,1,0x01, -1,-1,-1,+1,0,0x88, -1,-1,+1,-2,0,0x40,
+     -1,-1,+1,-1,0,0x22, -1,-1,+1,+0,0,0x33, -1,-1,+1,+1,1,0x11,
+     -1,+0,-1,+2,0,0x08, -1,+0,+0,-1,0,0x44, -1,+0,+0,+1,0,0x11,
+     -1,+0,+1,-2,1,0x40, -1,+0,+1,-1,0,0x66, -1,+0,+1,+0,1,0x22,
+     -1,+0,+1,+1,0,0x33, -1,+0,+1,+2,1,0x10, -1,+1,+1,-1,1,0x44,
+     -1,+1,+1,+0,0,0x66, -1,+1,+1,+1,0,0x22, -1,+1,+1,+2,0,0x10,
+     -1,+2,+0,+1,0,0x04, -1,+2,+1,+0,1,0x04, -1,+2,+1,+1,0,0x04,
+-    +0,-2,+0,+0,1,char(0x80), +0,-1,+0,+1,1,char(0x88), +0,-1,+1,-2,0,0x40,
++    +0,-2,+0,+0,1,0x80, +0,-1,+0,+1,1,0x88, +0,-1,+1,-2,0,0x40,
+     +0,-1,+1,+0,0,0x11, +0,-1,+2,-2,0,0x40, +0,-1,+2,-1,0,0x20,
+     +0,-1,+2,+0,0,0x30, +0,-1,+2,+1,1,0x10, +0,+0,+0,+2,1,0x08,
+     +0,+0,+2,-2,1,0x40, +0,+0,+2,-1,0,0x60, +0,+0,+2,+0,1,0x20,
+     +0,+0,+2,+1,0,0x30, +0,+0,+2,+2,1,0x10, +0,+1,+1,+0,0,0x44,
+     +0,+1,+1,+2,0,0x10, +0,+1,+2,-1,1,0x40, +0,+1,+2,+0,0,0x60,
+-    +0,+1,+2,+1,0,0x20, +0,+1,+2,+2,0,0x10, +1,-2,+1,+0,0,char(0x80),
+-    +1,-1,+1,+1,0,char(0x88), +1,+0,+1,+2,0,0x08, +1,+0,+2,-1,0,0x40,
++    +0,+1,+2,+1,0,0x20, +0,+1,+2,+2,0,0x10, +1,-2,+1,+0,0,0x80,
++    +1,-1,+1,+1,0,0x88, +1,+0,+1,+2,0,0x08, +1,+0,+2,-1,0,0x40,
+     +1,+0,+2,+1,0,0x10
+   }, chood[] = { -1,-1, -1,0, -1,+1, 0,+1, +1,+1, +1,0, +1,-1, 0,-1 };
+   ushort (*brow[5])[4], *pix;
+@@ -6623,9 +6623,7 @@
+ {
+   static const struct {
+     const char *prefix;
+-    short t_black;
+-    unsigned short t_maximum;
+-    short trans[12];
++    short t_black, t_maximum, trans[12];
+   } table[] = {
+     { "AGFAPHOTO DC-833m", 0, 0,	/* DJC */
+ 	{ 11438,-3762,-1115,-2409,9914,2497,-1227,2295,5300 } },

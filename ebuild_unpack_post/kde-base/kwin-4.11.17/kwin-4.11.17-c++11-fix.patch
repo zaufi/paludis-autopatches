@@ -1,0 +1,12 @@
+diff -u -r -b kwin-4.11.7.org/kwin/glxbackend.cpp kwin-4.11.7/kwin/glxbackend.cpp
+--- kwin-4.11.7.org/kwin/glxbackend.cpp	2015-02-27 08:18:57.000000000 +0800
++++ kwin-4.11.7/kwin/glxbackend.cpp	2015-05-04 12:05:34.000000000 +0800
+@@ -45,7 +45,7 @@
+     , window(None)
+     , fbconfig(NULL)
+     , glxWindow(None)
+-    , ctx(None)
++    , ctx(NULL)
+     , m_bufferAge(0)
+     , haveSwapInterval(false)
+ {
