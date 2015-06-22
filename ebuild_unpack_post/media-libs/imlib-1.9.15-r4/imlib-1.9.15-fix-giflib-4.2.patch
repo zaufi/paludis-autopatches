@@ -1,0 +1,98 @@
+--- Imlib/load.c.old	2014-01-20 12:04:16.514073763 -0500
++++ Imlib/load.c	2014-01-20 12:05:11.663010969 -0500
+@@ -431,6 +431,29 @@
+ #endif /* HAVE_LIBTIFF */
+ 
+ #ifdef HAVE_LIBGIF
++/*------------------------*/
++static void
++_PrintGifError(GifFileType *gif)
++{
++  /* GIFLIB_MAJOR is only defined in libgif >= 4.2.0 */
++  /* libgif 4.2.0 has retired PrintGifError() and added GifErrorString() */
++#if defined(GIFLIB_MAJOR) && defined(GIFLIB_MINOR) && \
++           ((GIFLIB_MAJOR == 4 && GIFLIB_MINOR >= 2) || GIFLIB_MAJOR > 4)
++  /* Static string actually, hence the const char* cast */
++  
++#if GIFLIB_MAJOR >= 5
++  const char* gifliberr = (const char*) GifErrorString(gif->Error);
++#else
++  const char* gifliberr = (const char*) GifErrorString();
++#endif
++  if (gifliberr == NULL)
++      gifliberr = "Unknown error";
++  fprintf(stderr, "%s\n", gifliberr);
++#else
++  PrintGifError();
++#endif
++}
++/*------------------------*/
+ unsigned char      *
+ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
+ {
+@@ -462,14 +485,14 @@
+     {
+       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
+ 	{
+-	  PrintGifError();
++	  _PrintGifError(gif);
+ 	  rec = TERMINATE_RECORD_TYPE;
+ 	}
+       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
+ 	{
+ 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
+ 	    {
+-	      PrintGifError();
++	      _PrintGifError(gif);
+ 	      rec = TERMINATE_RECORD_TYPE;
+ 	    }
+ 	  *w = gif->Image.Width;
+--- gdk_imlib/io-gif.c.old	2014-01-20 12:04:16.434075283 -0500
++++ gdk_imlib/io-gif.c	2014-01-20 12:05:51.262232780 -0500
+@@ -3,6 +3,29 @@
+ #include "gdk_imlib_private.h"
+ 
+ #ifndef HAVE_LIBGIF
++/*------------------------*/
++static void
++_PrintGifError(GifFileType *gif)
++{
++  /* GIFLIB_MAJOR is only defined in libgif >= 4.2.0 */
++  /* libgif 4.2.0 has retired PrintGifError() and added GifErrorString() */
++#if defined(GIFLIB_MAJOR) && defined(GIFLIB_MINOR) && \
++           ((GIFLIB_MAJOR == 4 && GIFLIB_MINOR >= 2) || GIFLIB_MAJOR > 4)
++  /* Static string actually, hence the const char* cast */
++  
++#if GIFLIB_MAJOR >= 5
++  const char* gifliberr = (const char*) GifErrorString(gif->Error);
++#else
++  const char* gifliberr = (const char*) GifErrorString();
++#endif
++  if (gifliberr == NULL)
++      gifliberr = "Unknown error";
++  fprintf(stderr, "%s\n", gifliberr);
++#else
++  PrintGifError();
++#endif
++}
++/*------------------------*/
+ unsigned char loader_gif (FILE *f, int *w, int *h, int *t)
+ {
+ 	return NULL;
+@@ -43,14 +66,14 @@
+     {
+       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
+ 	{
+-	  PrintGifError();
++	  _PrintGifError(gif);
+ 	  rec = TERMINATE_RECORD_TYPE;
+ 	}
+       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
+ 	{
+ 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
+ 	    {
+-	      PrintGifError();
++	      _PrintGifError(gif);
+ 	      rec = TERMINATE_RECORD_TYPE;
+ 	    }
+ 	  *w = gif->Image.Width;
