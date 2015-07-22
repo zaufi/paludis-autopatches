@@ -1,0 +1,21 @@
+--- a/cmake/regex-checks.cmake
++++ b/cmake/regex-checks.cmake
+@@ -42,12 +42,12 @@ ${outvar})
+   endif(${outvar})
+ endfunction(regex_test)
+ 
+-regex_test(std::regex regex "" HAVE_REGEX_REGEX REGEX_LIBRARY)
+-if(NOT HAVE_REGEX_REGEX)
+-  regex_test(std::tr1::regex tr1/regex "" HAVE_TR1_REGEX REGEX_LIBRARY)
+-  if(NOT HAVE_TR1_REGEX)
+-    regex_test(boost::regex boost/regex.hpp "${Boost_REGEX_LIBRARY_RELEASE}" HAVE_BOOST_REGEX REGEX_LIBRARY)
+-    if(NOT HAVE_BOOST_REGEX)
++regex_test(boost::regex boost/regex.hpp "${Boost_REGEX_LIBRARY_RELEASE}" HAVE_BOOST_REGEX REGEX_LIBRARY)
++if(NOT HAVE_BOOST_REGEX)
++  regex_test(std::regex regex "" HAVE_REGEX_REGEX REGEX_LIBRARY)
++  if(NOT HAVE_REGEX_REGEX)
++    regex_test(std::tr1::regex tr1/regex "" HAVE_TR1_REGEX REGEX_LIBRARY)
++    if(NOT HAVE_TR1_REGEX)
+       message(FATAL_ERROR "No working regular expression implementation found")
+     endif(NOT HAVE_BOOST_REGEX)
+   endif(NOT HAVE_TR1_REGEX)
