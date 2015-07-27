@@ -1,0 +1,14 @@
+diff -u -r -b cmake-3.2.2.org/Utilities/Sphinx/conf.py.in cmake-3.2.2/Utilities/Sphinx/conf.py.in
+--- cmake-3.2.2.org/Utilities/Sphinx/conf.py.in	2015-04-14 01:09:02.000000000 +0800
++++ cmake-3.2.2/Utilities/Sphinx/conf.py.in	2015-05-06 18:26:55.000000000 +0800
+@@ -58,8 +58,8 @@
+ 
+ html_show_sourcelink = True
+ html_static_path = ['@conf_path@/static']
+-html_style = 'cmake.css'
+-html_theme = 'default'
++#html_style = 'cmake.css'
++html_theme = 'classic'
+ html_title = 'CMake %s Documentation' % release
+ html_short_title = '%s Documentation' % release
+ html_favicon = '@conf_path@/static/cmake-favicon.ico'
