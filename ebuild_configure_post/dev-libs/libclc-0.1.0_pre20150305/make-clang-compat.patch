@@ -1,0 +1,13 @@
+Index: libclc-0.1.0_pre20150305/Makefile
+===================================================================
+--- libclc-0.1.0_pre20150305.orig/Makefile
++++ libclc-0.1.0_pre20150305/Makefile
+@@ -6,7 +6,7 @@ endif
+ 
+ utils/prepare-builtins.o: ./utils/prepare-builtins.cpp
+ 	@echo CXX utils/prepare-builtins.o
+-	$(Verb) /usr/bin/clang++ -MMD -MF utils/prepare-builtins.o.d -I/usr/include -O2 -ggdb -pipe -march=native -ftree-vectorize -fnothrow-opt -Wno-unused-local-typedefs  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wno-maybe-uninitialized -Wno-comment -Werror=date-time -std=c++11 -ffunction-sections -fdata-sections   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
++	$(Verb) /usr/bin/clang++ -MMD -MF utils/prepare-builtins.o.d -I/usr/include -O2 -ggdb -pipe -march=native -ftree-vectorize -Wno-unused-local-typedefs  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wno-maybe-uninitialized -Wno-comment -Werror=date-time -std=c++11 -ffunction-sections -fdata-sections   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
+ -include utils/prepare-builtins.o.d
+ 
+ utils/prepare-builtins: utils/prepare-builtins.o
