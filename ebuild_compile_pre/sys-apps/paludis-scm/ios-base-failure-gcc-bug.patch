@@ -1,0 +1,29 @@
+--- paludis-scm/paludis/util/elf.cc.origin	2016-04-08 14:09:04.000000000 +0300
++++ paludis-scm/paludis/util/elf.cc	2016-04-08 16:25:11.000000000 +0300
+@@ -131,7 +131,7 @@
+                 {
+                     _stream.exceptions(_old);
+                 }
+-                catch (const std::ios_base::failure &)
++                catch (const std::exception &)
+                 {
+                 }
+             }
+@@ -256,7 +256,7 @@
+ 
+         return (ident[EI_CLASS] == ElfType_::elf_class);
+     }
+-    catch (const std::ios_base::failure &)
++    catch (const std::exception &)
+     {
+         stream.clear();
+         return false;
+@@ -355,7 +355,7 @@
+         littlelf_internals::SectionNameResolvingVisitor<ElfType_> res(section_begin(), section_end());
+         _imp->sections[shstrndx]->accept(res);
+     }
+-    catch (const std::ios_base::failure &)
++    catch (const std::exception &)
+     {
+         throw InvalidElfFileError("file is truncated, or an offset points past the end of the file");
+     }
