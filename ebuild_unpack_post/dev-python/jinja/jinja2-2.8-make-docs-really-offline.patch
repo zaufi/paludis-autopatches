@@ -1,0 +1,11 @@
+--- a/docs/_themes/jinja/static/jinja.css_t
++++ b/docs/_themes/jinja/static/jinja.css_t
+@@ -6,8 +6,6 @@
+  * :license: Flask Design License, see LICENSE for details.
+  */
+ 
+-@import url(http://fonts.googleapis.com/css?family=Crimson+Text);
+-
+ {% set page_width = '940px' %}
+ {% set sidebar_width = '220px' %}
+ {% set font_family = 'Georgia, serif' %}
