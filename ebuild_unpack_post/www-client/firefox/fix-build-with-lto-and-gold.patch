@@ -1,0 +1,32 @@
+--- a/ipc/app/moz.build
++++ b/ipc/app/moz.build
+@@ -72,7 +72,7 @@ if CONFIG['MOZ_SANDBOX'] and CONFIG['OS_
+     # from the function using it which breaks the build.  Work around that by
+     # forcing there to be only one partition.
+     if '-flto' in CONFIG['OS_CXXFLAGS'] and not CONFIG['CLANG_CXX']:
+-        LDFLAGS += ['--param lto-partitions=1']
++        LDFLAGS += ['--lto-partition=one']
+ 
+ if CONFIG['MOZ_SANDBOX'] and CONFIG['OS_TARGET'] == 'Darwin':
+     # For sandbox includes and the include dependencies those have
+--- a/ipc/app/pie/moz.build
++++ b/ipc/app/pie/moz.build
+@@ -25,6 +25,6 @@ if CONFIG['MOZ_SANDBOX']:
+     # from the function using it which breaks the build.  Work around that by
+     # forcing there to be only one partition.
+     if '-flto' in CONFIG['OS_CXXFLAGS'] and not CONFIG['CLANG_CXX']:
+-	LDFLAGS += ['--param lto-partitions=1']
++	LDFLAGS += ['--lto-partition=one']
+ 
+ LDFLAGS += ['-pie']
+--- a/security/sandbox/linux/moz.build
++++ b/security/sandbox/linux/moz.build
+@@ -93,7 +93,7 @@ if CONFIG['GNU_CXX']:
+ # from the function using it which breaks the build.  Work around that by
+ # forcing there to be only one partition.
+ if '-flto' in CONFIG['OS_CXXFLAGS'] and not CONFIG['CLANG_CXX']:
+-    LDFLAGS += ['--param lto-partitions=1']
++    LDFLAGS += ['--lto-partition=one']
+ 
+ DEFINES['NS_NO_XPCOM'] = True
+ DISABLE_STL_WRAPPING = True
