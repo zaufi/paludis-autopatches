@@ -1,0 +1,11 @@
+--- a/Source/kwsys/Terminal.c
++++ b/Source/kwsys/Terminal.c
+@@ -202,7 +202,7 @@ static int kwsysTerminalStreamIsVT100(FI
+ #if defined(KWSYS_TERMINAL_ISATTY_WORKS)
+   /* Make sure the stream is a tty. */
+   (void)default_tty;
+-  return isatty(fileno(stream)) ? 1 : 0;
++  return 1;
+ #else
+   /* Check for cases in which the stream is definitely not a tty.  */
+   if (kwsysTerminalStreamIsNotInteractive(stream)) {
