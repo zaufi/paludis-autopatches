@@ -1,0 +1,22 @@
+Index: potrace-1.14/configure
+===================================================================
+--- potrace-1.14.orig/configure
++++ potrace-1.14/configure
+@@ -2926,7 +2926,7 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS con
+ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ if test -n "$ac_tool_prefix"; then
+-  for ac_prog in clang gcc cc c99 mgcc c89 pcc opencc sunc99 suncc
++  for ac_prog in gcc clang cc c99 mgcc c89 pcc opencc sunc99 suncc
+   do
+     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
+ set dummy $ac_tool_prefix$ac_prog; ac_word=$2
+@@ -2970,7 +2970,7 @@ fi
+ fi
+ if test -z "$CC"; then
+   ac_ct_CC=$CC
+-  for ac_prog in clang gcc cc c99 mgcc c89 pcc opencc sunc99 suncc
++  for ac_prog in gcc clang cc c99 mgcc c89 pcc opencc sunc99 suncc
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.
+ set dummy $ac_prog; ac_word=$2
