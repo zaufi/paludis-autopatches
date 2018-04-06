@@ -1,0 +1,10 @@
+diff --git a/addons/CMakeLists.txt b/addons/CMakeLists.txt
+index 636e4d894..5ed5ad0b7 100644
+--- a/addons/CMakeLists.txt
++++ b/addons/CMakeLists.txt
+@@ -5,4 +5,4 @@ add_subdirectory (ktexteditor)
+ add_subdirectory (kate)
+ 
+ # Plasma applets
+-add_subdirectory (plasma)
++#add_subdirectory (plasma)
