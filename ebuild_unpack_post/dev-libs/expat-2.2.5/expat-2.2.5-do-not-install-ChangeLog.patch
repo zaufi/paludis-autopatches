@@ -1,0 +1,19 @@
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -46,16 +46,6 @@ libexpat_la_SOURCES = \
+     xmltok.c \
+     xmlrole.c
+ 
+-doc_DATA = \
+-    ../AUTHORS \
+-    ../Changes
+-
+-install-data-hook:
+-	cd "$(DESTDIR)$(docdir)" && $(am__mv) Changes changelog
+-
+-uninstall-local:
+-	$(RM) "$(DESTDIR)$(docdir)/changelog"
+-
+ EXTRA_DIST = \
+     ascii.h \
+     asciitab.h \
